@@ -1,0 +1,11 @@
+﻿.mini-modal {
+    position: absolute;
+    background-color:gray;
+    padding: 15px 15px 15px 15px;
+    font-size: 13px;
+    /*top: 13px;*/
+    left: 5%;
+    /*height: 150px;*/
+    overflow: auto;
+
+}
