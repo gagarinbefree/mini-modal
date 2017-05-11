@@ -8,10 +8,20 @@
 </head>
 <body>
     <button id="modal-preview">Preview modal</button>
+    <button id="modal-hide">Hide modal</button>
     <div id="modal01" class="mini-modal">
         <div class="mini-modal-header">cvcv</div>
         <hr />
         <div class="mini-modal-body">
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
+            <p>dsfsdfdsf</p>
             <p>dsfsdfdsf</p>
             <p>dsfsdfdsf</p>
             <p>dsfsdfdsf</p>
@@ -24,14 +34,24 @@
 
     <script type="text/javascript">
         window.onload = function () {
-            var modal = new minimodal();
+            var modal = new minimodal({
+                'maxHeight': 550,
+                'padding': 100
+
+            });
             modal.onclick = function (e) {
                 alert(this.id);
             }
-            var button = document.getElementById('modal-preview');
-            button.onclick = function (el) {
+            
+            var buttonShow = document.getElementById('modal-preview');
+            buttonShow.onclick = function (el) {
                 modal.show('modal01');
-            }            
+            }
+
+            var buttonHide = document.getElementById('modal-hide');
+            buttonHide.onclick = function (el) {
+                modal.hide('modal01');
+            }
         }
     </script>
 </body>

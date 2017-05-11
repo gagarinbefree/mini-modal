@@ -1,10 +1,12 @@
 ﻿var minimodal = (function () {
-    function minimodal() {
+    function minimodal(conf) {
         var self = this;
 
-        this.modals = [];
+        this.conf = conf;        
+        this.modals = [];                
 
         try {
+            this.defaultSettings();
             this.init();
         } 
         catch (e) {
@@ -12,20 +14,51 @@
         }
     }
 
-    minimodal.prototype.onclick = undefined;
-    
+    minimodal.prototype.onclick = function () {
+
+    }
+
+    minimodal.prototype.defaultSettings = function () {
+        if (typeof(this.conf) == 'undefined')
+            this.conf = {};
+        
+        if (typeof (this.conf.maxHeight) == 'undefined')
+            this.conf.height = 250;
+
+        if (typeof (this.conf.padding) == 'undefined')
+            this.conf.padding = 50;
+    }
+
     minimodal.prototype.init = function () {
         var self = this;
+        this.createItems();
+        this.addEventListener(window, 'resize', function () { self.modalResize(); });
+        this.modalResize();
+    }
+
+    minimodal.prototype.createItems = function() {
         var elModals = minimodal.getElementsByClassName('mini-modal');
         if (elModals) {
             for (var ii = 0; ii < elModals.length; ii++) {
-                var item = new minimodalitem(elModals[ii]);
-                this.addEventListener(item.elModal, 'click', function (e) {
-                    self.clickHandler(e, item.elModal);
-                });
-
-                this.modals.push(new minimodalitem(elModals[ii]));
+                this.modals.push(this.itemFab(elModals[ii]));
             }
+        }
+    }
+
+    minimodal.prototype.itemFab = function(el) {
+        var self = this;
+        var item = new minimodalitem(this.conf, el);
+
+        this.addEventListener(item.elModal, 'click', function (e) {
+            self.clickHandler(e, item.elModal);
+        });
+
+        return item;
+    }
+
+    minimodal.prototype.modalResize = function () {
+        for (var ii = 0; ii < this.modals.length; ii++) {
+            this.modals[ii].modalResize();
         }
     }
 
@@ -49,6 +82,17 @@
             return;
         
         modal.show();
+    }
+
+    minimodal.prototype.hide = function (id) {
+        if (typeof (id) == 'undefined')
+            return;
+
+        var modal = this.findModalById(id);
+        if (typeof (modal) == 'undefined')
+            return;
+
+        modal.hide();
     }
 
     minimodal.prototype.findModalById = function (id) {
@@ -108,21 +152,14 @@
 })();
 
 var minimodalitem = (function () {
-    function minimodalitem(el) {
+    function minimodalitem(conf, el) {
         var self = this;
         this.elModal = el;
         this.elModalHeader = minimodal.getElementsByClassName('mini-modal-header')[0];
         this.elModalBody = minimodal.getElementsByClassName('mini-modal-body')[0];
-        this.elModalFooter = minimodal.getElementsByClassName('mini-modal-footer')[0];
-        this.isLive = true;
-
-        var vp = new viewport();
-
-        this.elModal.style.left = '50px'
-        this.elModal.style.top = '50px';
-        this.elModal.style.width = (vp.viewportwidth - 150).toString() + 'px';
-        //this.elModal.style.height = (vp.viewportheight - 150).toString() + 'px';
-
+        this.elModalFooter = minimodal.getElementsByClassName('mini-modal-footer')[0];       
+        this.conf = conf;
+        
         this.hide();
     }    
 
@@ -133,6 +170,15 @@ var minimodalitem = (function () {
     minimodalitem.prototype.hide = function () {
         this.elModal.style.display = 'none';
     }
+
+    minimodalitem.prototype.modalResize = function (e) {
+        var vp = new viewport();
+
+        this.elModal.style.left = this.conf.padding + 'px';
+        this.elModal.style.top = this.conf.padding + 'px';
+        this.elModal.style.width = (vp.viewportwidth - this.conf.padding * 2).toString() + 'px';
+        this.elModal.style.maxHeight = this.conf.maxHeight + 'px';
+    }    
 
     minimodalitem.prototype.getElementsByClassName = function (className) {
         if (typeof(className) == 'undefined' || className.length == 0)

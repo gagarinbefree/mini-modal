@@ -21,6 +21,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "mini-modal(1)", "mini-modal
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "36648"
+		SlnRelativePath = "mini-modal\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
